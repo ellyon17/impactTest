@@ -4,30 +4,31 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Impact AI — Charter Mock</title>
-  <!-- Tailwind Play CDN (prototype use only) -->
+  <!-- Tailwind (CDN) for quick deploys like GitHub Pages -->
   <script src="https://cdn.tailwindcss.com"></script>
-  <!-- React 18 + Babel (prototype use only) -->
+  <!-- React 18 + Babel to run JSX in-browser (prototype only) -->
   <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
   <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
   <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
-  <style>body{-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}</style>
+  <style>
+    body { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
+  </style>
 </head>
 <body class="bg-[#0f1035]">
   <div id="root"></div>
+
   <script type="text/babel">
     const { useState } = React;
 
-    /* === Paste of your component adapted for the browser === */
     function CharterMockup() {
       const [leftOpen, setLeftOpen] = useState(true);
       const [assistantOpen, setAssistantOpen] = useState(false);
       const gridTemplate = assistantOpen
         ? (leftOpen ? '220px 1fr 360px' : '56px 1fr 360px')
         : (leftOpen ? '220px 1fr' : '56px 1fr');
-
       return (
         <div className="min-h-screen bg-[#0f1035] text-[#e8ebff] p-5 font-sans">
-          <!-- Header -->
+          {/* Header */}
           <div className="rounded-xl bg-[#1c245d] border border-[#2a3173] px-4 py-3 flex items-center gap-3">
             <h1 className="text-xl font-semibold">Charter — Test Chatbot</h1>
             <span className="px-2 py-0.5 rounded-full text-sm bg-[#142b52] text-[#8fd6ff]">v1.01</span>
@@ -38,13 +39,11 @@
             <div className="ml-auto flex gap-2">
               <button className="h-8 px-3 rounded-md border border-[#2a3173] bg-[#2a2d66] text-[#cfd2ff]">Share / Export</button>
               <button className="h-8 px-3 rounded-md bg-[#7b3fe4] text-white shadow">Request Review</button>
-              <button onClick={()=>setAssistantOpen(v=>!v)} className="h-8 px-3 rounded-md border border-[#2a3173] bg-[#2a2d66] text-[#cfd2ff]">
-                {assistantOpen ? 'Hide Assistant' : 'Assistant'}
-              </button>
+              <button onClick={()=>setAssistantOpen(v=>!v)} className="h-8 px-3 rounded-md border border-[#2a3173] bg-[#2a2d66] text-[#cfd2ff]">{assistantOpen ? 'Hide Assistant' : 'Assistant'}</button>
             </div>
           </div>
 
-          <!-- Connections -->
+          {/* Connections ribbon */}
           <div className="mt-3 rounded-xl bg-[#12184a] border border-[#2a3173] px-4 py-2 flex items-center gap-4">
             <div className="text-sm font-semibold">Connections</div>
             <span className="px-2 py-0.5 rounded-full text-sm bg-[#163e2c] text-[#8ef7c2]">SDK • Connected</span>
@@ -52,7 +51,326 @@
             <button className="ml-auto h-8 px-3 rounded-md border border-[#2a3173] bg-[#2a2d66] text-[#cfd2ff]">Manage</button>
           </div>
 
-          <!-- Body grid -->
+          {/* Body grid */}
           <div className="mt-4 grid gap-4" style={{ gridTemplateColumns: gridTemplate }}>
-            <!-- Left nav (collapsible) -->
-            <div className={`rounded-xl bg-[#12184a] border border-[#2a3173] p-3 h-fit ${leftOpen ? 'w-[220
+            {/* Left nav (collapsible) */}
+            <div className={`rounded-xl bg-[#12184a] border border-[#2a3173] p-3 h-fit ${leftOpen ? 'w-[220px]' : 'w-[56px]'} overflow-hidden`}>
+              <div className="flex items-center justify-between">
+                <div className="text-sm font-semibold">{leftOpen ? 'Navigate' : ''}</div>
+                <button onClick={()=>setLeftOpen(o=>!o)} className="h-7 w-7 rounded-md border border-[#2a3173] bg-[#2a2d66]">{leftOpen ? '‹' : '›'}</button>
+              </div>
+              <nav className="mt-3 space-y-2">
+                {[
+                  {k:'C', label:'Charter'},
+                  {k:'M', label:'Monitoring'},
+                  {k:'I', label:'Insights'},
+                  {k:'O', label:'Optimization'}
+                ].map((item)=> (
+                  <div key={item.label} title={item.label} className={`flex items-center gap-2 rounded-lg px-2 py-2 border border-[#2a3173] bg-[#171d57] text-sm cursor-pointer hover:bg-[#1a225a]`}> 
+                    <div className="h-6 w-6 rounded bg-[#2a2d66] flex items-center justify-center text-xs">{item.k}</div>
+                    {leftOpen && <span>{item.label}</span>}
+                  </div>
+                ))}
+              </nav>
+            </div>
+
+            {/* Main content */}
+            <div className="space-y-4">
+              {/* Product Library */}
+              <section className="rounded-xl bg-[#12164a] border border-[#2a3173] p-4">
+                <div className="flex items-center gap-3">
+                  <h2 className="text-base font-semibold">Product Library</h2>
+                  <span className="px-2 py-0.5 rounded-full text-xs bg-[#2a2641] text-[#cfd2ff]">3 linked</span>
+                  <div className="ml-auto flex gap-2">
+                    <button className="h-8 px-3 rounded-md border border-[#2a3173] bg-[#2a2d66] text-[#cfd2ff]">Link Docs</button>
+                    <button className="h-8 px-3 rounded-md border border-[#2a3173] bg-[#2a2d66] text-[#cfd2ff]">Upload</button>
+                    <button className="h-8 px-3 rounded-md bg-[#7b3fe4] text-white">Browse Library</button>
+                  </div>
+                </div>
+                <div className="mt-3 grid md:grid-cols-3 gap-3 text-xs">
+                  <div className="rounded-lg bg-[#171d57] border border-[#2a3173] p-3">• PRD — Health Support Chatbot</div>
+                  <div className="rounded-lg bg-[#171d57] border border-[#2a3173] p-3">• Refund Policy 2025‑08</div>
+                  <div className="rounded-lg bg-[#171d57] border border-[#2a3173] p-3">• Competitor Brief — NurseLine AI</div>
+                </div>
+              </section>
+              {/* Opportunity */}
+              <section className="rounded-xl bg-[#12164a] border border-[#2a3173] p-4">
+                <div className="flex items-center gap-3">
+                  <h2 className="text-base font-semibold">Opportunity</h2>
+                  <span className="px-2 py-0.5 rounded-full text-xs bg-[#3a2a10] text-[#ffdca6]">Draft</span>
+                  <div className="ml-auto flex gap-2">
+                    <button className="h-8 px-3 rounded-md border border-[#2a3173] bg-[#2a2d66] text-[#cfd2ff]">Link Docs</button>
+                    <button className="h-8 px-3 rounded-md border border-[#2a3173] bg-[#2a2d66] text-[#cfd2ff]">Auto‑fill from Docs</button>
+                    <button className="h-8 px-3 rounded-md bg-[#7b3fe4] text-white">Accept</button>
+                  </div>
+                </div>
+
+                {/* 1. Landscape & Motivation */}
+                <div className="mt-4">
+                  <div className="text-sm font-semibold">Landscape & Motivation</div>
+                  <div className="mt-2 grid md:grid-cols-2 gap-3">
+                    <div className="rounded-lg bg-[#171d57] border border-[#2a3173] p-3 text-sm">
+                      <div className="text-xs text-[#aab6ff] mb-1">Trend</div>
+                      <div className="flex flex-wrap gap-2">
+                        {['GenAI in Care','Virtual Triage','Self‑serve Claims'].map(t=> (
+                          <span key={t} className="px-2 py-1 rounded-full bg-[#2a2d66] text-white text-xs">{t}</span>
+                        ))}
+                      </div>
+                    </div>
+                    <div className="rounded-lg bg-[#171d57] border border-[#2a3173] p-3 text-sm">
+                      <div className="text-xs text-[#aab6ff] mb-1">Mission Fit</div>
+                      <input className="w-full h-8 rounded bg-transparent border border-[#2a3173] px-2 text-xs" placeholder="How does this align with company mission?"/>
+                    </div>
+                    <div className="rounded-lg bg-[#171d57] border border-[#2a3173] p-3 text-sm">
+                      <div className="text-xs text-[#aab6ff] mb-1">Market Size</div>
+                      <div className="flex gap-2 items-center text-xs">
+                        <input className="flex-1 h-8 rounded bg-transparent border border-[#2a3173] px-2" placeholder="e.g., TAM $1.2B, SAM $250M"/>
+                        <button className="h-8 px-3 rounded-md border border-[#2a3173]">Estimate</button>
+                      </div>
+                    </div>
+                    <div className="rounded-lg bg-[#171d57] border border-[#2a3173] p-3 text-sm">
+                      <div className="text-xs text-[#aab6ff] mb-1">Strengths</div>
+                      <div className="flex flex-wrap gap-2">
+                        {['Clinical SME','Data Access','Brand Trust'].map(s=> (
+                          <span key={s} className="px-2 py-1 rounded-full bg-[#2a2641] text-[#cfd2ff] text-xs">{s}</span>
+                        ))}
+                      </div>
+                    </div>
+                    <div className="md:col-span-2 rounded-lg bg-[#171d57] border border-[#2a3173] p-3 text-sm">
+                      <div className="text-xs text-[#aab6ff] mb-1">Benefits (to company)</div>
+                      <textarea className="w-full h-16 rounded bg-transparent border border-[#2a3173] p-2 text-xs" placeholder="e.g., Reduce nurse line volume by 25%, improve CSAT by 0.3, protect PHI"></textarea>
+                    </div>
+                  </div>
+                </div>
+
+                {/* 2. Target Audience */}
+                <div className="mt-5">
+                  <div className="text-sm font-semibold">Target Audience</div>
+                  <div className="mt-2 grid md:grid-cols-2 gap-3">
+                    <div className="rounded-lg bg-[#171d57] border border-[#2a3173] p-3">
+                      <div className="text-xs text-[#aab6ff] mb-1">Ecosystem (segments)</div>
+                      <div className="flex flex-wrap gap-2 text-xs">
+                        {['Patient','Clinician','Ops','Payer','Provider'].map(e=> (
+                          <span key={e} className="px-2 py-1 rounded-full bg-[#2a2d66] text-white">{e}</span>
+                        ))}
+                      </div>
+                    </div>
+                    <div className="rounded-lg bg-[#171d57] border border-[#2a3173] p-3">
+                      <div className="text-xs text-[#aab6ff] mb-1">User Personas</div>
+                      <div className="flex flex-wrap gap-2 text-xs">
+                        {['New Patient','Caregiver','Nurse','Billing Agent'].map(p=> (
+                          <span key={p} className="px-2 py-1 rounded-full bg-[#1a225a] text-[#cfd2ff]">{p}</span>
+                        ))}
+                      </div>
+                    </div>
+                    <div className="md:col-span-2 rounded-lg bg-[#171d57] border border-[#2a3173] p-3">
+                      <div className="text-xs text-[#aab6ff] mb-1">Persona Prioritization</div>
+                      <div className="flex flex-wrap gap-2 text-xs">
+                        {['Nurse (P1)','Patient (P1)','Billing (P2)','Caregiver (P3)'].map(p=> (
+                          <span key={p} className="px-2 py-1 rounded-full bg-[#2a2641] text-[#cfd2ff]">{p}</span>
+                        ))}
+                      </div>
+                      <input className="mt-2 w-full h-8 rounded bg-transparent border border-[#2a3173] px-2 text-xs" placeholder="Why these priorities?"/>
+                    </div>
+                  </div>
+                </div>
+
+                {/* 3. Problem & Prioritization */}
+                <div className="mt-5">
+                  <div className="text-sm font-semibold">Problem & Prioritization</div>
+                  <div className="mt-2 grid md:grid-cols-2 gap-3">
+                    <div className="rounded-lg bg-[#171d57] border border-[#2a3173] p-3">
+                      <div className="text-xs text-[#aab6ff] mb-1">Painpoints (top 3)</div>
+                      <ul className="text-xs list-disc pl-5 space-y-1 text-[#cfd2ff]">
+                        <li>Long nurse line wait times</li>
+                        <li>Policy confusion → refusals</li>
+                        <li>Fragmented records</li>
+                      </ul>
+                    </div>
+                    <div className="rounded-lg bg-[#171d57] border border-[#2a3173] p-3">
+                      <div className="text-xs text-[#aab6ff] mb-1">Success Strategy (solve these 3–4)</div>
+                      <ul className="text-xs list-disc pl-5 space-y-1 text-[#cfd2ff]">
+                        <li>Embed policy snippets in prompts</li>
+                        <li>Pre‑triage routine intents</li>
+                        <li>Surface insurance coverage facts</li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+
+                {/* 4. Solutions & Outcomes */}
+                <div className="mt-5">
+                  <div className="text-sm font-semibold">Solutions & Outcomes</div>
+                  <div className="mt-2 grid md:grid-cols-2 gap-3">
+                    <div className="rounded-lg bg-[#171d57] border border-[#2a3173] p-3">
+                      <div className="text-xs text-[#aab6ff] mb-1">JTBD</div>
+                      <div className="flex flex-wrap gap-2 text-xs">
+                        {['Understand benefits','Get refund','Find provider','Check eligibility'].map(j=> (
+                          <span key={j} className="px-2 py-1 rounded-full bg-[#2a2d66] text-white">{j}</span>
+                        ))}
+                      </div>
+                    </div>
+                    <div className="rounded-lg bg-[#171d57] border border-[#2a3173] p-3">
+                      <div className="text-xs text-[#aab6ff] mb-1">OKR Seeds</div>
+                      <div className="text-xs text-[#cfd2ff]">We’ll generate Objectives & KRs from the above. </div>
+                      <div className="mt-2 flex gap-2">
+                        <button className="h-8 px-3 rounded-md border border-[#2a3173] bg-[#2a2d66] text-[#cfd2ff]">Preview OKRs</button>
+                        <button className="h-8 px-3 rounded-md bg-[#7b3fe4] text-white">Send to Strategy</button>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="mt-3 text-[11px] text-[#aab6ff]">Tip: You can accept AI drafts or edit any field. Provenance is shown on hover.</div>
+                </div>
+              </section>
+
+              {/* Strategy */}
+              <section className="rounded-xl bg-[#12164a] border border-[#2a3173] p-4">
+                <div className="flex items-center gap-3">
+                  <h2 className="text-base font-semibold">Strategy</h2>
+                  <span className="px-2 py-0.5 rounded-full text-xs bg-[#163e2c] text-[#8ef7c2]">In progress</span>
+                  <div className="ml-auto flex gap-2">
+                    <span className="px-2 py-0.5 rounded-full text-xs bg-[#2a2641] text-[#cfd2ff]">OKRs from Opportunity: Ready</span>
+                    <button className="h-8 px-3 rounded-md bg-[#7b3fe4] text-white">Accept & Sync</button>
+                  </div>
+                </div>
+
+                {/* KPI Proposal banner */}
+                <div className="mt-3 flex items-center gap-3 rounded-lg bg-[#171d57] border border-[#2a3173] p-3">
+                  <div className="text-xs">Proposed KPIs from OKRs: <span className="text-[#8ef7c2]">7</span> total • <span className="text-[#ffd27a]">1 needs data binding</span></div>
+                  <button className="ml-auto h-8 px-3 rounded-md bg-[#7b3fe4] text-white">Review Proposed KPIs</button>
+                </div>
+
+                {/* Data contracts (minimal inputs) */}
+                <div className="mt-3 grid md:grid-cols-3 gap-3">
+                  <div className="rounded-lg bg-[#171d57] border border-[#2a3173] p-3 text-xs">
+                    <div className="text-[#aab6ff] mb-1">Re‑contact window</div>
+                    <div className="flex gap-2 flex-wrap">
+                      {['24h','48h','72h'].map(x=> <span key={x} className={`px-2 py-1 rounded-full ${x==='72h'? 'bg-[#2a2d66] text-white':'bg-[#2a2641] text-[#cfd2ff]'}`}>{x}</span>)}
+                    </div>
+                  </div>
+                  <div className="rounded-lg bg-[#171d57] border border-[#2a3173] p-3 text-xs">
+                    <div className="text-[#aab6ff] mb-1">Survey scale</div>
+                    <div className="flex gap-2 flex-wrap">
+                      {['1–5','1–7'].map(x=> <span key={x} className={`px-2 py-1 rounded-full ${x==='1–5'? 'bg-[#2a2d66] text-white':'bg-[#2a2641] text-[#cfd2ff]'}`}>{x}</span>)}
+                    </div>
+                  </div>
+                  <div className="rounded-lg bg-[#171d57] border border-[#2a3173] p-3 text-xs">
+                    <div className="text-[#aab6ff] mb-1">Eligible intents (FCR)</div>
+                    <div className="flex gap-2 flex-wrap">
+                      {['Billing','Refund','Coverage'].map(x=> <span key={x} className="px-2 py-1 rounded-full bg-[#2a2641] text-[#cfd2ff]">{x}</span>)}
+                    </div>
+                  </div>
+                </div>
+
+                {/* Objectives & KRs */}
+                <div className="mt-4 text-sm font-medium">O2: Improve experience & efficiency</div>
+                {[
+                  {kr:'CSAT ≥ 4.6/5', kpi:'CSAT Mean (selected from Library: Survey/CSAT)', status:'Ready', sync:true},
+                  {kr:'FCR ≥ 60% (eligible)', kpi:'FCR (eligible) (selected from Library: Resolution/FCR)', status:'Ready', sync:true},
+                  {kr:'Deflection ≥ 25%', kpi:'Deflection Rate (Needs Module)', status:'Needs Module', sync:false, warn:true},
+                  {kr:'p95 latency ≤ 2.0s', kpi:'Response Latency p95 (Library: Performance/Latency)', status:'Ready', sync:true},
+                ].map((row,i)=> (
+                  <div key={i} className="mt-2 rounded-lg bg-[#171d57] border border-[#2a3173] p-3 text-xs">
+                    <div className="flex items-start gap-2">
+                      <div className="font-medium w-48">{row.kr}</div>
+                      <div className="flex-1 text-[#cfd2ff]">KPI: {row.kpi}</div>
+                      <div className={`ml-auto ${row.warn? 'text-[#ffd27a]':'text-[#8ef7c2]'}`}>{row.status}</div>
+                      <div className="text-[#aab6ff] ml-3">Sync</div>
+                      <input type="checkbox" defaultChecked={row.sync} className="accent-[#7b3fe4]"/>
+                    </div>
+                    {row.warn && (
+                      <div className="mt-2 flex gap-2">
+                        <button className="h-7 px-3 rounded-md border border-[#2a3173] bg-[#2a2d66] text-[#cfd2ff]">Open Module Library</button>
+                        <button className="h-7 px-3 rounded-md bg-[#7b3fe4] text-white">Launch Module Studio</button>
+                      </div>
+                    )}
+                  </div>
+                ))}
+              </section>
+
+              {/* Viability */}
+              <section className="rounded-xl bg-[#12164a] border border-[#2a3173] p-4">
+                <div className="flex items-center gap-3">
+                  <h2 className="text-base font-semibold">Viability</h2>
+                  <span className="px-2 py-0.5 rounded-full text-xs bg-[#2a2641] text-[#cfd2ff]">In review</span>
+                  <div className="ml-auto flex gap-2">
+                    <button className="h-8 px-3 rounded-md border border-[#2a3173] bg-[#2a2d66] text-[#cfd2ff]">Link Docs</button>
+                    <button className="h-8 px-3 rounded-md bg-[#7b3fe4] text-white">Export 1‑pager</button>
+                  </div>
+                </div>
+
+                <div className="mt-3 grid grid-cols-3 gap-3">
+                  {/* Feasibility */}
+                  <div className="col-span-3 lg:col-span-1 rounded-lg bg-[#171d57] border border-[#2a3173] p-3">
+                    <div className="text-sm font-semibold mb-2">Feasibility</div>
+                    <div className="text-xs text-[#aab6ff]">Cost‑to‑serve model</div>
+                    <div className="mt-2 h-3 w-full rounded bg-[#1c2355]"><div className="h-3 w-1/2 rounded bg-[#7aa7ff]"></div></div>
+                    <div className="mt-2 text-xs">Expected: $4.8k/mo</div>
+                    <div className="mt-3 text-xs text-[#aab6ff]">Go / No‑Go gates</div>
+                    <div className="flex flex-wrap gap-4 items-center text-xs mt-1">
+                      {['Quality ≥ 0.80','Safety ≤ 0.5%','Cost/1k ≤ $5.00'].map(g=> (
+                        <label key={g} className="inline-flex items-center gap-2"><input type="checkbox" defaultChecked className="accent-[#7b3fe4]"/><span>{g}</span></label>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Compliance */}
+                  <div className="col-span-3 lg:col-span-1 rounded-lg bg-[#171d57] border border-[#2a3173] p-3">
+                    <div className="text-sm font-semibold mb-2">Compliance</div>
+                    <ul className="text-xs text-[#aab6ff] space-y-1">
+                      <li>HIPAA PHI handling — <span className="text-[#8ef7c2]">OK</span></li>
+                      <li>PII Retention — <span className="text-[#ffd27a]">Needs review</span></li>
+                      <li>Model Usage Policy — <span className="text-[#8ef7c2]">OK</span></li>
+                    </ul>
+                    <div className="mt-2 flex gap-2">
+                      <button className="h-8 px-3 rounded-md border border-[#2a3173] bg-[#2a2d66] text-[#cfd2ff]">Attach Evidence</button>
+                      <button className="h-8 px-3 rounded-md bg-[#7b3fe4] text-white">Request Review</button>
+                    </div>
+                  </div>
+
+                  {/* Risk Assessment */}
+                  <div className="col-span-3 lg:col-span-1 rounded-lg bg-[#171d57] border border-[#2a3173] p-3">
+                    <div className="text-sm font-semibold mb-2">Risk Assessment</div>
+                    <ul className="text-xs text-[#aab6ff] list-disc pl-5 space-y-1">
+                      <li>Safety regressions → gated rollout + evals</li>
+                      <li>Cost spike → cheaper model / cache</li>
+                    </ul>
+                    <div className="mt-2 text-xs text-[#aab6ff]">Risk level: <span className="text-[#ffd27a]">Medium</span></div>
+                  </div>
+                </div>
+
+                <div className="mt-3 text-[11px] text-[#aab6ff]">Tip: You can ask Max to auto‑fill any section using linked docs (Notion, Google Docs, etc.).</div>
+              </section>
+            </div>
+
+            {/* Assistant rail */}
+            <div className="rounded-xl bg-[#12184a] border border-[#2a3173] p-3 h-fit" style={{ display: assistantOpen ? 'block' : 'none' }}>
+              <div className="text-sm font-semibold mb-2">Assistant</div>
+              <div className="rounded-lg bg-[#171d57] border border-[#2a3173] p-3">
+                <div className="text-xs mb-2">What you can do:</div>
+                <div className="space-y-2">
+                  {['Draft Opportunity from docs','Generate OKRs from Opportunity','Estimate costs from usage'].map((s)=>(
+                    <div key={s} className="rounded-md bg-[#1a225a] border border-[#2a3173] px-3 py-1 text-xs text-[#aab6ff]">{s}</div>
+                  ))}
+                </div>
+              </div>
+              <div className="mt-3 rounded-lg bg-[#141a4f] border border-[#2a3173] p-3">
+                <div className="text-sm font-semibold">Max suggests</div>
+                <div className="text-xs mt-1">Opportunity mentions "refunds" — add policy doc to Context.</div>
+                <div className="mt-2 flex gap-2">
+                  <button className="h-8 px-3 rounded-md bg-[#7b3fe4] text-white">Add document</button>
+                  <button className="h-8 px-3 rounded-md border border-[#2a3173] bg-[#2a2d66] text-[#cfd2ff]">Ignore</button>
+                </div>
+              </div>
+              <input placeholder="Ask about the Charter…" className="mt-3 w-full h-9 rounded-md bg-[#171d57] border border-[#2a3173] px-3 text-xs placeholder-[#aab6ff]"/>
+            </div>
+          </div>
+        </div>
+      );
+    }
+
+    const root = ReactDOM.createRoot(document.getElementById('root'));
+    root.render(<CharterMockup />);
+  </script>
+</body>
+</html>
