@@ -1,0 +1,175 @@
+import React, { useMemo, useState } from "react";
+
+/**
+
+Impact AI — Monitoring (Option 1: Hub + Sub‑pages)
+
+Full-frame mock with:
+
+Top header
+
+
+Collapsible left nav (like Charter)
+
+
+Collapsible right Assistant dock
+
+
+Overview hub + sub‑pages (Hero KPIs, Iris, Orion)
+
+
+No external router; simple in‑memory routes to avoid reference errors.
+
+Tailwind-friendly, violet/teal aesthetic. */
+
+
+const theme = { plum: "from-violet-600 to-fuchsia-600", teal: "from-teal-500 to-cyan-500", card: "bg-neutral-900 border border-neutral-800", chip: "px-2 py-0.5 rounded-full text-[10px] tracking-wide uppercase", };
+
+const routes = { overview: "overview", hero: "hero", iris: "iris", orion: "orion", };
+
+export default function MonitoringApp() { const [route, setRoute] = useState(routes.overview); const [leftOpen, setLeftOpen] = useState(true); const [rightOpen, setRightOpen] = useState(true);
+
+return ( <div className="min-h-screen bg-gradient-to-br from-neutral-950 via-neutral-900 to-neutral-950 text-neutral-100"> <TopBar />
+
+<div className="mx-auto max-w-7xl px-4 py-4">
+    <div className="grid grid-cols-[auto_1fr_auto] gap-4">
+      <Sidebar open={leftOpen} onToggle={() => setLeftOpen((v) => !v)} go={setRoute} />
+
+      <main className="min-h-[72vh]">
+        <Breadcrumbs route={route} go={setRoute} />
+        {route === routes.overview && <Overview go={setRoute} />}
+        {route === routes.hero && <HeroKPIsPage go={setRoute} />}
+        {route === routes.iris && <IrisPage go={setRoute} />}
+        {route === routes.orion && <OrionPage go={setRoute} />}
+      </main>
+
+      <AssistantDock open={rightOpen} onToggle={() => setRightOpen((v) => !v)} />
+    </div>
+  </div>
+</div>
+
+); }
+
+function TopBar() { return ( <header className="sticky top-0 z-10 backdrop-blur supports-[backdrop-filter]:bg-neutral-950/50"> <div className="mx-auto max-w-7xl flex items-center justify-between px-4 py-3"> <div className="flex items-center gap-3"> <div className="size-8 rounded-xl bg-gradient-to-r from-violet-600 to-teal-500" /> <span className="font-semibold">Impact AI • Monitoring</span> </div> <button className="text-xs px-3 py-1.5 rounded-lg border border-neutral-700 hover:bg-neutral-800" onClick={() => alert("Module Studio (mock)")} > Module Studio </button> </div> <div className="h-px bg-gradient-to-r from-transparent via-neutral-800 to-transparent" /> </header> ); }
+
+/*********************** LEFT NAV ************************/ function Sidebar({ open, onToggle, go }) { return ( <aside className={${theme.card} rounded-2xl p-3 sticky top-16 h-[calc(100vh-6rem)] ${open ? "w-60" : "w-14"} transition-[width] duration-200}> <div className="flex items-center justify-between mb-2"> <div className={text-xs font-semibold ${open ? "block" : "hidden"}}>Navigate</div> <button className="text-xs px-2 py-1 rounded-md border border-neutral-700 hover:bg-neutral-800" onClick={onToggle}> {open ? "⟨⟨" : "⟩⟩"} </button> </div> <nav className="space-y-1"> <NavItem open={open} label="Charter" onClick={() => alert("Open Charter (mock)")} /> <NavItem open={open} label="Monitoring" active onClick={() => go(routes.overview)} /> <NavItem open={open} label="Insights" onClick={() => alert("Open Insights (mock)")} /> <NavItem open={open} label="Optimization" onClick={() => alert("Open Optimization (mock)")} /> </nav>
+
+<div className={`mt-4 ${open ? "block" : "hidden"}`}>
+    <div className="text-[10px] uppercase tracking-wide text-neutral-500 mb-2">Connections</div>
+    <div className="text-xs text-neutral-400 space-y-2">
+      <div className="flex items-center justify-between"><span>SDK • Connected</span><span className="text-teal-400">●</span></div>
+      <div className="flex items-center justify-between"><span>Query API • Connected</span><span className="text-teal-400">●</span></div>
+    </div>
+  </div>
+</aside>
+
+); }
+
+function NavItem({ open, label, onClick, active }) { return ( <button onClick={onClick} className={w-full text-left px-3 py-2 rounded-xl transition border border-transparent ${ active ? "bg-indigo-950/60 border-indigo-800" : "hover:bg-neutral-800" }} > {open ? label : label[0]} </button> ); }
+
+/*********************** RIGHT DOCK ************************/ function AssistantDock({ open, onToggle }) { return ( <aside className={${theme.card} rounded-2xl p-3 sticky top-16 h-[calc(100vh-6rem)] ${open ? "w-72" : "w-14"} transition-[width] duration-200}> <div className="flex items-center justify-between mb-2"> <div className={text-xs font-semibold ${open ? "block" : "hidden"}}>Assistant</div> <button className="text-xs px-2 py-1 rounded-md border border-neutral-700 hover:bg-neutral-800" onClick={onToggle}> {open ? "⟨⟨" : "⟩⟩"} </button> </div> {open && ( <div className="space-y-3 text-xs text-neutral-300"> <div className="rounded-xl bg-neutral-800 p-3"> <div className="font-medium mb-1">What you can do</div> <ul className="list-disc pl-4 space-y-1 text-neutral-400"> <li>Explain how a KPI is measured</li> <li>Suggest new metrics for Iris/Orion</li> <li>Create a Module Studio template</li> </ul> </div> <div className="rounded-xl bg-neutral-800 p-3"> <div className="font-medium mb-1">Suggestions</div> <button className="w-full text-left px-3 py-2 rounded-lg border border-neutral-700 hover:bg-neutral-850">Add KPI: Conversion</button> <button className="w-full text-left mt-2 px-3 py-2 rounded-lg border border-neutral-700 hover:bg-neutral-850">Open Iris: Safety Deep‑Dive</button> </div> </div> )} </aside> ); }
+
+/*********************** BREADCRUMBS ************************/ function Breadcrumbs({ route, go }) { const crumbs = { [routes.overview]: ["Monitoring"], [routes.hero]: ["Monitoring", "Hero KPIs"], [routes.iris]: ["Monitoring", "AI Quality (Iris)"], [routes.orion]: ["Monitoring", "Business (Orion)"], }[route]; return ( <nav className="text-xs text-neutral-400 mb-4"> {crumbs.map((c, i) => ( <span key={i}> {i === 0 ? ( <button className="hover:text-neutral-200" onClick={() => go(routes.overview)}> {c} </button> ) : ( <span className="text-neutral-500"> / {c}</span> )} </span> ))} </nav> ); }
+
+/************************** OVERVIEW *************************/ function Overview({ go }) { return ( <div className="space-y-6"> {/ Hero KPIs */} <SectionHeader title="Hero KPIs" subtitle="Your top outcome metrics linked to Strategy/OKRs." action={<AddMetricButton />} /> <div className="grid md:grid-cols-3 gap-4"> <KpiCard title="CSAT" value="82%" delta="+3.1%" trend="up" onClick={() => go(routes.hero)} /> <KpiCard title="Resolution Rate" value="71%" delta="-1.4%" trend="down" onClick={() => go(routes.hero)} /> <KpiCard title="Avg. Handle Time" value="2.8m" delta="-9s" trend="up" onClick={() => go(routes.hero)} /> </div>
+
+{/* Iris */}
+  <SectionHeader title="AI Quality (Iris)" subtitle="Technical metrics: quality, safety, personality." action={<AddMetricButton />} />
+  <div className="grid md:grid-cols-3 gap-4">
+    <WidgetCard title="Quality" score={0.93} gradient={theme.plum} onClick={() => go(routes.iris)} />
+    <WidgetCard title="Safety" score={0.88} gradient={theme.teal} onClick={() => go(routes.iris)} />
+    <WidgetCard title="Personality" score={0.76} gradient={theme.plum} onClick={() => go(routes.iris)} />
+  </div>
+
+  {/* Orion */}
+  <SectionHeader title="Business (Orion)" subtitle="User, product, and business analytics." action={<AddMetricButton />} />
+  <div className="grid md:grid-cols-3 gap-4">
+    <OrionPreview title="User Analytics" stats={["Active: 2", "New: 1", "Growth: +100%"]} onClick={() => go(routes.orion)} />
+    <OrionPreview title="Product Analytics" stats={["Latency: 590ms", "Cost/msg: $0.003", "Errors: 0.6%"]} onClick={() => go(routes.orion)} />
+    <OrionPreview title="Business Analytics" stats={["ARPA: $412", "Churn: 1.2%", "LTV/CAC: 3.1x"]} onClick={() => go(routes.orion)} />
+  </div>
+</div>
+
+); }
+
+/************************** PAGES **************************/ function HeroKPIsPage({ go }) { const [unit, setUnit] = useState("absolute"); return ( <div className="space-y-6"> <PageHeader title="Hero KPIs" subtitle="Edit, annotate and explore the KPIs tied to your OKRs." onBack={() => go(routes.overview)} />
+
+<div className="flex items-center gap-2 text-xs">
+    <Toggle value={unit} onChange={setUnit} options={[{ id: "absolute", label: "Absolute" }, { id: "score", label: "Score" }]} />
+    <span className="text-neutral-500">Last updated: 6m ago</span>
+  </div>
+
+  <div className="grid md:grid-cols-3 gap-4">
+    <KpiDetail title="CSAT" info="Survey-weighted; N≥100/week" dataset={demoSeries(82)} />
+    <KpiDetail title="Resolution Rate" info="Solved within 24h" dataset={demoSeries(71)} />
+    <KpiDetail title="Avg. Handle Time" info="Median, mm:ss" dataset={demoSeries(2.8)} />
+  </div>
+
+  <div className="flex gap-2">
+    <button className="px-3 py-2 rounded-lg border border-neutral-700 hover:bg-neutral-800 text-xs">Export CSV</button>
+    <button className="px-3 py-2 rounded-lg bg-gradient-to-r from-violet-600 to-teal-500 text-white text-xs" onClick={() => alert("Open Module Studio (mock)")}>Add/Modify in Module Studio</button>
+  </div>
+</div>
+
+); }
+
+function IrisPage({ go }) { return ( <div className="space-y-6"> <PageHeader title="AI Quality (Iris)" subtitle="Transparent scoring with definitions and deep dives." onBack={() => go(routes.overview)} />
+
+<div className="grid md:grid-cols-3 gap-4">
+    <IrisPanel title="Quality" description="Factuality • Reasoning • Generation • Understanding • Robustness" score={0.93} />
+    <IrisPanel title="Safety" description="Toxicity • PII • Jailbreak • Prompt injection" score={0.88} />
+    <IrisPanel title="Personality" description="Tone • Helpfulness • Consistency" score={0.76} />
+  </div>
+
+  <div className="text-xs text-neutral-400">
+    <p className="mb-2">Scoring method: each widget shows a confidence interval and how the score is computed (click “How it’s measured”).</p>
+    <button className="px-3 py-2 rounded-lg bg-gradient-to-r from-violet-600 to-teal-500 text-white" onClick={() => alert("Open Module Studio (mock)")}>Open Module Studio</button>
+  </div>
+</div>
+
+); }
+
+function OrionPage({ go }) { return ( <div className="space-y-6"> <PageHeader title="Business (Orion)" subtitle="Actionable analytics for users, product and revenue." onBack={() => go(routes.overview)} />
+
+<div className="grid md:grid-cols-3 gap-4">
+    <OrionBlock title="User Analytics" bullets={["Active users (DAU/WAU)", "New users", "Growth rate"]} />
+    <OrionBlock title="Product Analytics" bullets={["Latency", "Error rate", "Cost per message"]} />
+    <OrionBlock title="Business Analytics" bullets={["Revenue", "ARPA", "Churn", "LTV/CAC"]} />
+  </div>
+
+  <div className="flex gap-2 text-xs">
+    <button className="px-3 py-2 rounded-lg border border-neutral-700 hover:bg-neutral-800">Export PDF</button>
+    <button className="px-3 py-2 rounded-lg bg-gradient-to-r from-violet-600 to-teal-500 text-white" onClick={() => alert("Open Module Studio (mock)")}>Add metrics in Module Studio</button>
+  </div>
+</div>
+
+); }
+
+/************************** UI PRIMITIVES **************************/ function SectionHeader({ title, subtitle, action }) { return ( <div className="flex items-end justify-between"> <div> <h3 className="text-base font-semibold text-white">{title}</h3> <p className="text-xs text-neutral-400">{subtitle}</p> </div> {action} </div> ); }
+
+function PageHeader({ title, subtitle, onBack }) { return ( <div className="flex items-center justify-between"> <div> <div className="text-xs text-neutral-500 mb-1"> <button className="hover:text-neutral-300" onClick={onBack}> ← Back to Overview </button> </div> <h2 className="text-xl font-semibold text-white">{title}</h2> <p className="text-xs text-neutral-400">{subtitle}</p> </div> <AddMetricButton /> </div> ); }
+
+function AddMetricButton() { return ( <button className="text-xs px-3 py-1.5 rounded-lg bg-gradient-to-r from-violet-600 to-teal-500 text-white shadow" onClick={() => alert("Open Module Studio (mock)")}> + Add metric in Module Studio </button> ); }
+
+function KpiCard({ title, value, delta, trend, onClick }) { return ( <button onClick={onClick} className={text-left rounded-2xl ${theme.card} p-4 hover:bg-neutral-800 transition}> <div className="flex items-center justify-between mb-3"> <div className={${theme.chip} bg-violet-600/20 text-violet-300 border border-violet-600/30}>KPI</div> <DeltaBadge delta={delta} trend={trend} /> </div> <div className="text-sm text-neutral-400">{title}</div> <div className="text-2xl font-semibold text-white">{value}</div> <MiniSpark /> </button> ); }
+
+function KpiDetail({ title, info, dataset }) { return ( <div className={rounded-2xl ${theme.card} p-4}> <div className="flex items-center justify-between mb-2"> <div> <div className="text-sm font-medium text-white">{title}</div> <div className="text-xs text-neutral-500">{info}</div> </div> <button className="text-xs px-2 py-1 rounded-md border border-neutral-700 hover:bg-neutral-800" onClick={() => alert("Explain metric (mock)")}>How it’s measured</button> </div> <LargeSpark data={dataset} /> </div> ); }
+
+function WidgetCard({ title, score, gradient, onClick }) { return ( <button onClick={onClick} className={text-left rounded-2xl ${theme.card} p-4 hover:bg-neutral-800 transition}> <div className="flex items-center justify-between mb-2"> <div className={${theme.chip} bg-teal-600/20 text-teal-300 border border-teal-600/30}>Iris</div> <span className="text-xs text-neutral-500">CI: ±2%</span> </div> <div className="text-sm text-neutral-400">{title}</div> <div className="text-2xl font-semibold text-white">{Math.round(score * 100)}%</div> <div className={mt-2 h-2 rounded-full bg-neutral-800 overflow-hidden}> <div className={h-full bg-gradient-to-r ${gradient}} style={{ width: ${score * 100}% }} /> </div> </button> ); }
+
+function OrionPreview({ title, stats, onClick }) { return ( <button onClick={onClick} className={text-left rounded-2xl ${theme.card} p-4 hover:bg-neutral-800 transition}> <div className="flex items-center justify-between mb-2"> <div className={${theme.chip} bg-indigo-600/20 text-indigo-300 border border-indigo-600/30}>Orion</div> <span className="text-xs text-neutral-500">7d</span> </div> <div className="text-sm font-medium text-white mb-1">{title}</div> <ul className="text-xs text-neutral-400 space-y-1"> {stats.map((s, i) => ( <li key={i}>• {s}</li> ))} </ul> </button> ); }
+
+function OrionBlock({ title, bullets }) { return ( <div className={rounded-2xl ${theme.card} p-4}> <div className="text-sm font-medium text-white mb-2">{title}</div> <ul className="text-xs text-neutral-400 space-y-1"> {bullets.map((b, i) => ( <li key={i}>• {b}</li> ))} </ul> <div className="mt-3 flex gap-2"> <button className="text-xs px-2 py-1 rounded-md border border-neutral-700 hover:bg-neutral-800" onClick={() => alert("Open dashboard (mock)")}>Open dashboard</button> <button className="text-xs px-2 py-1 rounded-md border border-neutral-700 hover:bg-neutral-800" onClick={() => alert("Explain metric (mock)")}>How it’s measured</button> </div> </div> ); }
+
+/************************** IRIS PANEL **************************/ function IrisPanel({ title, description, score }) { return ( <div className={rounded-2xl ${theme.card} p-4}> <div className="flex items-center justify-between mb-2"> <div className="text-sm font-medium text-white">{title}</div> <span className="text-xs text-neutral-500">CI: ±2%</span> </div> <p className="text-xs text-neutral-400 mb-3">{description}</p> <div className="text-2xl font-semibold text-white">{Math.round(score * 100)}%</div> <div className={mt-2 h-2 rounded-full bg-neutral-800 overflow-hidden}> <div className={h-full bg-gradient-to-r ${theme.plum}} style={{ width: ${score * 100}% }} /> </div> <div className="mt-3 flex gap-2"> <button className="text-xs px-2 py-1 rounded-md border border-neutral-700 hover:bg-neutral-800" onClick={() => alert('Open deep-dive (mock)')}>Open deep‑dive</button> <button className="text-xs px-2 py-1 rounded-md border border-neutral-700 hover:bg-neutral-800" onClick={() => alert('Explain scoring (mock)')}>How it’s measured</button> </div> </div> ); }
+
+/************************** TINY CHARTS **************************/ function MiniSpark() { const pts = useMemo( () => Array.from({ length: 20 }, (_, i) => 40 + Math.sin(i / 2) * 10 + Math.random() * 6), [] ); return ( <svg viewBox="0 0 100 50" className="mt-2 w-full h-10"> <polyline fill="none" stroke="#6ee7b7" strokeWidth="2" points={pts.map((y, i) => ${i * 5},${50 - y}).join(" ")} /> </svg> ); }
+
+function LargeSpark({ data }) { const pts = useMemo(() => data.map((y, i) => ${i * 10},${100 - y}), [data]); return ( <svg viewBox="0 0 200 100" className="w-full h-28 mt-2"> <polyline fill="none" stroke="#a78bfa" strokeWidth="2" points={pts.join(" ")} /> <defs> <linearGradient id="g1" x1="0" x2="0" y1="0" y2="1"> <stop offset="0%" stopColor="#a78bfa" stopOpacity="0.35" /> <stop offset="100%" stopColor="#a78bfa" stopOpacity="0" /> </linearGradient> </defs> <polygon fill="url(#g1)" points={0,100 ${pts.join(" ")} 200,100} /> </svg> ); }
+
+function DeltaBadge({ delta, trend }) { const good = trend === "up"; return ( <span className={text-[11px] px-2 py-0.5 rounded-md border ${ good ? "text-teal-300 border-teal-700 bg-teal-600/10" : "text-rose-300 border-rose-700 bg-rose-600/10" }} > {good ? "▲" : "▼"} {delta} </span> ); }
+
+/************************** HELPERS **************************/ function Toggle({ value, onChange, options }) { return ( <div className="inline-flex items-center rounded-lg border border-neutral-700 overflow-hidden"> {options.map((o) => ( <button key={o.id} className={px-2 py-1 text-xs ${value === o.id ? "bg-neutral-800 text-white" : "text-neutral-400 hover:bg-neutral-800/60"}} onClick={() => onChange(o.id)} > {o.label} </button> ))} </div> ); }
+
+function demoSeries(base) { const out = []; for (let i = 0; i < 20; i++) out.push(base + Math.sin(i / 2) * 2 + (Math.random() * 2 - 1)); return out; }
+
